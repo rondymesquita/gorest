@@ -2,7 +2,6 @@ package model
 
 import (
 	"strings"
-	"fmt"
 )
 
 const(
@@ -19,9 +18,7 @@ type Mock struct{
 
 func (mock *Mock) String() string{
 	s := []string{"Path", mock.Path, "HttpMethod", mock.HttpMethod, "Response", mock.Response.String()}
-	stringJoined := strings.Join(s, " ")
-	fmt.Println(stringJoined)
-	return stringJoined
+	return strings.Join(s, " ")
 }
 
 type Response struct{
@@ -32,4 +29,10 @@ type Response struct{
 func (response *Response) String() string{
 	s := []string{"Data", response.Data, "Type", response.Type}
 	return strings.Join(s, " ")
+}
+
+
+type ResponseData struct{
+	Message string "json:'message' binding:'required'"
+	Status string "json:'status' binding:'required'"
 }

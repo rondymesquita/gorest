@@ -11,6 +11,7 @@ import (
 	"encoding/json"
 	"gorest/model"
 	"gorest/test/helper"
+	"io/ioutil"
 )
 
 var app server.App
@@ -35,23 +36,22 @@ func teardown() {
 	app.Stop()
 }
 
-func TestAnotherOne(t *testing.T) {
+func TestCreateRouteShouldExists(t *testing.T) {
 	setup()
 	var mockHelper helper.MockHelper
 	mock := mockHelper.BuildBasicJsonGet()
-	buffer := new(bytes.Buffer)
-	json.NewEncoder(buffer).Encode(mock)
+	jsonString := new(bytes.Buffer)
+	json.NewEncoder(jsonString).Encode(mock)
 
-	response, _ := http.Post(fmt.Sprintf("%s%s", host, "/create"), "application/json; charset=utf-8", buffer)
+	response, _ := http.Post(fmt.Sprintf("%s%s", host, "/create"), "application/json; charset=utf-8", jsonString)
 	assert.Equal(t, 200, response.StatusCode)
 	var output model.Mock
 	json.NewDecoder(response.Body).Decode(&output)
 	fmt.Println(output)
 	teardown()
-
 }
 
-func TestAllFlow(t *testing.T) {
+func TestCreateAMockRouteWithJsonReturnAndGetMethod(t *testing.T) {
 	setup()
 	response, _ := http.Get(fmt.Sprintf("%s%s", host, "/json-get"))
 	assert.Equal(t, 404, response.StatusCode)
@@ -62,11 +62,20 @@ func TestAllFlow(t *testing.T) {
 	json.NewEncoder(jsonString).Encode(mock)
 
 	response, _ = http.Post(fmt.Sprintf("%s%s", host, "/create"), "application/json; charset=utf-8", jsonString)
-	assert.Equal(t, 200, response.StatusCode)
-	var output model.Mock
-	json.NewDecoder(response.Body).Decode(&output)
+	//responseBody, _ := ioutil.ReadAll(response.Body)
 
-	response, _ = http.Get(fmt.Sprintf("%s%s", host, "/json-get"))
+	var responseData model.ResponseData
+	json.NewDecoder(response.Body).Decode(&responseData)
+
+	responseDataExpected := model.ResponseData{"Route created with success.", "SUCCESS"}
+
 	assert.Equal(t, 200, response.StatusCode)
+	assert.Equal(t, responseDataExpected, responseData)
+
+	//response, _ = http.Get(fmt.Sprintf("%s%s", host, "/json-get"))
+	//responseBody, _ := ioutil.ReadAll(response.Body)
+	//fmt.Println(string(responseBody))
+	//assert.Equal(t, 200, response.StatusCode)
+	//assert.Equal(t, mock.Response.Data, strings.Trim(string(responseBody), "\"\n"))
 	teardown()
 }
