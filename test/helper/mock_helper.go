@@ -1,14 +1,13 @@
-package test
+package helper
 
-import(
+import (
 	"gorest/model"
 )
 
-type MockHelper struct{
-
+type MockHelper struct {
 }
 
-func (mockHelper *MockHelper) buildBasicJsonGet() model.Mock{
+func (mockHelper *MockHelper) BuildBasicJsonGet() model.Mock {
 	var mock model.Mock
 	mock.Path = "/json-get"
 	mock.HttpMethod = "get"

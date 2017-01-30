@@ -9,11 +9,13 @@ import (
 
 type App struct {
 	Engine *gin.Engine
+	Port string
 }
 
 func (app *App) Create() {
 	// gin.SetMode(gin.TestMode)
 	app.Engine = gin.Default()
+	app.Port = "3000"
 	app.Engine.GET("/ping", func(context *gin.Context) {
 		context.JSON(200, gin.H{
 			"message": "pong",
@@ -41,7 +43,7 @@ func (app *App) buildFrom(mock model.Mock) {
 func (app *App) Start() {
 	//app.Engine.Run(":3000")
 	fmt.Println("===> Server Started")
-	manners.ListenAndServe(":3000", app.Engine)
+	manners.ListenAndServe(fmt.Sprintf(":%s", app.Port), app.Engine)
 }
 
 func (app *App) Stop() {
