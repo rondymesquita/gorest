@@ -36,7 +36,7 @@ func (app *App) Create() {
 		routeBuilder.BuildFrom(mock)
 
 		//TODO validate if route already exists and return a response message for it
-		responseData := model.ResponseData{Message: util.RouteCreatedWithSuccess, Status: util.Success}
+		responseData := model.ResponseMessage{Message: util.RouteCreatedWithSuccess, Status: util.Success}
 		context.JSON(200, responseData)
 	})
 

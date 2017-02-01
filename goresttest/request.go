@@ -13,13 +13,13 @@ import (
 
 var host = fmt.Sprintf("http://localhost:%s", app.Port)
 
-func Post(uri string, payload *bytes.Buffer) (*http.Response, model.ResponseData){
-	url := url(uri)
+func DoCreateMockRequest(payload *bytes.Buffer) (*http.Response, model.ResponseMessage){
+	url := url("/create")
 	response, _ := http.Post(url, "application/json; charset=utf-8", payload)
 
-	var responseData model.ResponseData
-	json.NewDecoder(response.Body).Decode(&responseData)
-	return response, responseData
+	var responseMessage model.ResponseMessage
+	json.NewDecoder(response.Body).Decode(&responseMessage)
+	return response, responseMessage
 }
 
 
@@ -27,10 +27,8 @@ func Get(uri string) (*http.Response, string){
 	url := url(uri)
 	response, _ := http.Get(url)
 	responseBody, _ := ioutil.ReadAll(response.Body)
-
-	responseDataString := strings.TrimSpace(string(responseBody))
-
-	return response, responseDataString
+	data := strings.TrimSpace(string(responseBody))
+	return response, data
 }
 
 

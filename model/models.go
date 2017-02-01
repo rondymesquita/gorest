@@ -33,14 +33,13 @@ func (response *Response) String() string{
 	return strings.Join(s, " ")
 }
 
-type ResponseData struct{
+type ResponseMessage struct{
 	Message string "json:'message' binding:'required'"
 	Status string "json:'status' binding:'required'"
 }
 
-func (responseData *ResponseData) ToJSON() *bytes.Buffer{
-	responseDataJson := new(bytes.Buffer)
-	json.NewEncoder(responseDataJson).Encode(responseData)
-	//ioutil.ReadAll(
-	return responseDataJson
+func (responseMessage *ResponseMessage) ToJSON() *bytes.Buffer{
+	responseMessageJson := new(bytes.Buffer)
+	json.NewEncoder(responseMessageJson).Encode(responseMessage)
+	return responseMessageJson
 }
