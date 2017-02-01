@@ -1,11 +1,11 @@
 package main
 
 import (
-	"gorest/server"
+	"github.com/rondymesquita/gorest/server"
 )
 
 func main() {
-	var app server.App
+	var app app.App
 	app.Create()
 	app.Start()
 

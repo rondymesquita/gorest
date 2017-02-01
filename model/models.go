@@ -2,6 +2,8 @@ package model
 
 import (
 	"strings"
+	"encoding/json"
+	"bytes"
 )
 
 const(
@@ -31,8 +33,14 @@ func (response *Response) String() string{
 	return strings.Join(s, " ")
 }
 
-
 type ResponseData struct{
 	Message string "json:'message' binding:'required'"
 	Status string "json:'status' binding:'required'"
+}
+
+func (responseData *ResponseData) ToJSON() *bytes.Buffer{
+	responseDataJson := new(bytes.Buffer)
+	json.NewEncoder(responseDataJson).Encode(responseData)
+	//ioutil.ReadAll(
+	return responseDataJson
 }

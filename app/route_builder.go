@@ -1,7 +1,7 @@
-package server
+package app
 
 import(
-	"gorest/model"
+	"github.com/rondymesquita/gorest/model"
 	"gopkg.in/gin-gonic/gin.v1"
 )
 

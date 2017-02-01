@@ -1,23 +1,17 @@
-package test
+package goresttest
 
 import (
-	"fmt"
-	"gorest/server"
+	"github.com/rondymesquita/gorest/app"
 	"testing"
 	"gopkg.in/gin-gonic/gin.v1"
-	"net/http"
 	"github.com/stretchr/testify/assert"
-	"bytes"
-	"encoding/json"
-	"gorest/model"
-	"gorest/test/helper"
-	"io/ioutil"
-	"strings"
+	"github.com/rondymesquita/gorest/model"
+	"github.com/rondymesquita/gorest/goresttest"
 	"strconv"
+	"github.com/rondymesquita/gorest/util"
 )
 
-var app server.App
-var host string
+var application app.App
 
 //func TestMain(m *testing.M) {
 //	setup()
@@ -28,52 +22,45 @@ var host string
 
 func setup() {
 	gin.SetMode(gin.TestMode)
-	app.Create()
-	host = fmt.Sprintf("http://localhost:%s", app.Port)
-	go app.Start()
+	application.Create()
+	go application.Start()
 
 }
 
 func teardown() {
-	app.Stop()
+	application.Stop()
 }
 
 func TestCreateRouteShouldExists(t *testing.T) {
 	setup()
-	var mockHelper helper.MockHelper
-	mock := mockHelper.BuildBasicJsonGet()
-	jsonString := new(bytes.Buffer)
-	json.NewEncoder(jsonString).Encode(mock)
+	var mockHelper goresttest.MockHelper
+	_, mockJson := mockHelper.BuildJsonGet()
 
-	response, _ := http.Post(fmt.Sprintf("%s%s", host, "/create"), "application/json; charset=utf-8", jsonString)
+	response, _ := goresttest.Post("/create", mockJson)
 	assert.Equal(t, 200, response.StatusCode)
 	teardown()
 }
 
 func TestCreateAMockRouteWithJsonReturnAndGetMethod(t *testing.T) {
 	setup()
-	response, _ := http.Get(fmt.Sprintf("%s%s", host, "/json-get"))
-	assert.Equal(t, 404, response.StatusCode)
+	resp, _ := goresttest.Get("/json-get")
+	assert.Equal(t, 404, resp.StatusCode)
 
-	var mockHelper helper.MockHelper
-	mock := mockHelper.BuildBasicJsonGet()
-	jsonString := new(bytes.Buffer)
-	json.NewEncoder(jsonString).Encode(mock)
-	response, _ = http.Post(fmt.Sprintf("%s%s", host, "/create"), "application/json; charset=utf-8", jsonString)
+	var mockHelper goresttest.MockHelper
+	mock, mockJson := mockHelper.BuildJsonGet()
 
-	var responseData model.ResponseData
-	json.NewDecoder(response.Body).Decode(&responseData)
-	responseDataExpected := model.ResponseData{Message: "Route created with success.", Status: "SUCCESS"}
+	response, responseData := goresttest.Post("/create", mockJson)
+	responseDataExpected := model.ResponseData{Message: util.RouteCreatedWithSuccess, Status: util.Success}
 
 	assert.Equal(t, 200, response.StatusCode)
 	assert.Equal(t, responseDataExpected, responseData)
 	assert.Equal(t, "application/json; charset=utf-8", response.Header.Get("Content-Type"))
 
-	response, _ = http.Get(fmt.Sprintf("%s%s", host, "/json-get"))
-	responseBody, _ := ioutil.ReadAll(response.Body)
+	response, responseDataString := goresttest.Get("/json-get")
 
 	assert.Equal(t, 200, response.StatusCode)
-	assert.Equal(t, strconv.Quote(mock.Response.Data), strings.TrimSpace(string(responseBody)))
+	assert.Equal(t, strconv.Quote(mock.Response.Data), responseDataString)
+	assert.Equal(t, "application/json; charset=utf-8", response.Header.Get("Content-Type"))
 
 	teardown()
 }

@@ -1,24 +1,26 @@
-package server
+package app
 
 import (
 	"fmt"
-	"gorest/model"
+	"github.com/rondymesquita/gorest/model"
 
 	"github.com/braintree/manners"
 	"gopkg.in/gin-gonic/gin.v1"
 	"log"
-	"gorest/util"
+	"github.com/rondymesquita/gorest/util"
+)
+
+const(
+	Port = "9091"
 )
 
 type App struct {
 	Engine *gin.Engine
-	Port   string
 }
 
 func (app *App) Create() {
 	//gin.SetMode(gin.ReleaseMode)
 	app.Engine = gin.Default()
-	app.Port = "3000"
 
 	app.Engine.GET("/ping", func(context *gin.Context) {
 		context.JSON(200, gin.H{
@@ -34,7 +36,7 @@ func (app *App) Create() {
 		routeBuilder.BuildFrom(mock)
 
 		//TODO validate if route already exists and return a response message for it
-		responseData := model.ResponseData{Message: constant.RouteCreatedWithSuccess, Status: "SUCCESS"}
+		responseData := model.ResponseData{Message: util.RouteCreatedWithSuccess, Status: util.Success}
 		context.JSON(200, responseData)
 	})
 
@@ -42,7 +44,7 @@ func (app *App) Create() {
 
 func (app *App) Start() {
 	log.Println("Starting Server")
-	manners.ListenAndServe(fmt.Sprintf(":%s", app.Port), app.Engine)
+	manners.ListenAndServe(fmt.Sprintf(":%s", Port), app.Engine)
 }
 
 func (app *App) Stop() {
