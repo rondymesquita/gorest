@@ -2,9 +2,12 @@ package server
 
 import (
 	"fmt"
-	"gopkg.in/gin-gonic/gin.v1"
-	"github.com/braintree/manners"
 	"gorest/model"
+
+	"github.com/braintree/manners"
+	"gopkg.in/gin-gonic/gin.v1"
+	"log"
+	"gorest/util"
 )
 
 type App struct {
@@ -13,7 +16,7 @@ type App struct {
 }
 
 func (app *App) Create() {
-	// gin.SetMode(gin.TestMode)
+	//gin.SetMode(gin.ReleaseMode)
 	app.Engine = gin.Default()
 	app.Port = "3000"
 
@@ -31,18 +34,18 @@ func (app *App) Create() {
 		routeBuilder.BuildFrom(mock)
 
 		//TODO validate if route already exists and return a response message for it
-		responseData := model.ResponseData{Message: "Route created with success.", Status: "SUCCESS"}
+		responseData := model.ResponseData{Message: constant.RouteCreatedWithSuccess, Status: "SUCCESS"}
 		context.JSON(200, responseData)
 	})
 
 }
 
 func (app *App) Start() {
-	fmt.Println("===> Starting Server")
+	log.Println("Starting Server")
 	manners.ListenAndServe(fmt.Sprintf(":%s", app.Port), app.Engine)
 }
 
 func (app *App) Stop() {
 	manners.Close()
-	fmt.Println("===> Server Stopped ")
+	log.Println("Server Stopped ")
 }
