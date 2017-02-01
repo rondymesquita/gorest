@@ -7,7 +7,7 @@ import (
 	"github.com/braintree/manners"
 	"gopkg.in/gin-gonic/gin.v1"
 	"log"
-	"github.com/rondymesquita/gorest/util"
+	"github.com/rondymesquita/gorest/constant"
 )
 
 const(
@@ -36,8 +36,8 @@ func (app *App) Create() {
 		routeBuilder.BuildFrom(mock)
 
 		//TODO validate if route already exists and return a response message for it
-		responseData := model.ResponseMessage{Message: util.RouteCreatedWithSuccess, Status: util.Success}
-		context.JSON(200, responseData)
+		responseData := model.ResponseMessage{Message: constant.RouteCreatedWithSuccess, Status: constant.Success}
+		context.JSON(201, responseData)
 	})
 
 }

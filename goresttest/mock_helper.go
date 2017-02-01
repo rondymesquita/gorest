@@ -23,3 +23,18 @@ func (mockHelper *MockHelper) BuildJsonGet() (model.Mock, *bytes.Buffer) {
 
 	return mock, mockJson
 }
+
+func (mockHelper *MockHelper) BuildJsonPost() (model.Mock, *bytes.Buffer) {
+	var mock model.Mock
+	mock.Path = "/json-post"
+	mock.HttpMethod = "post"
+	var response model.Response
+	response.Type = "json"
+	response.Data = "{'id':'1', 'email':'email@email.com'}"
+	mock.Response = response
+
+	mockJson := new(bytes.Buffer)
+	json.NewEncoder(mockJson).Encode(mock)
+
+	return mock, mockJson
+}

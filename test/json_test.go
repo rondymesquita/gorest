@@ -1,4 +1,4 @@
-package goresttest
+package test
 
 import (
 	"github.com/rondymesquita/gorest/app"
@@ -8,7 +8,7 @@ import (
 	"github.com/rondymesquita/gorest/model"
 	"github.com/rondymesquita/gorest/goresttest"
 	"strconv"
-	"github.com/rondymesquita/gorest/util"
+	"github.com/rondymesquita/gorest/constant"
 )
 
 var application app.App
@@ -37,7 +37,7 @@ func TestCreateRouteShouldExists(t *testing.T) {
 	_, mockJson := mockHelper.BuildJsonGet()
 
 	response, _ := goresttest.DoCreateMockRequest(mockJson)
-	assert.Equal(t, 200, response.StatusCode)
+	assert.Equal(t, 201, response.StatusCode)
 	teardown()
 }
 
@@ -51,15 +51,15 @@ func TestCreateAMockRouteWithJsonReturnAndGetMethod(t *testing.T) {
 	assert.Equal(t, 404, resp.StatusCode)
 
 	response, responseMessage := goresttest.DoCreateMockRequest(mockJson)
-	responseMessageExpected := model.ResponseMessage{Message: util.RouteCreatedWithSuccess, Status: util.Success}
-	assert.Equal(t, 200, response.StatusCode)
+	responseMessageExpected := model.ResponseMessage{Message: constant.RouteCreatedWithSuccess, Status: constant.Success}
+	assert.Equal(t, 201, response.StatusCode)
 	assert.Equal(t, responseMessageExpected, responseMessage)
-	assert.Equal(t, "application/json; charset=utf-8", response.Header.Get("Content-Type"))
+	assert.Equal(t, "application/json; charset=utf-8", response.Header.Get(constant.ContentType))
 
-	response, data := goresttest.Get("/json-get")
+	response, data := goresttest.Get(mock.Path)
 	assert.Equal(t, 200, response.StatusCode)
 	assert.Equal(t, strconv.Quote(mock.Response.Data), data)
-	assert.Equal(t, "application/json; charset=utf-8", response.Header.Get("Content-Type"))
+	assert.Equal(t, constant.ApplicationJsonUTF8, response.Header.Get(constant.ContentType))
 
 	teardown()
 }
