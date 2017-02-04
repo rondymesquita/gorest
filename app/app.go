@@ -18,7 +18,7 @@ type App struct {
 	Engine *gin.Engine
 }
 
-func (app *App) Create() {
+func (app *App) Create() *gin.Engine{
 	//gin.SetMode(gin.ReleaseMode)
 	app.Engine = gin.Default()
 
@@ -39,6 +39,7 @@ func (app *App) Create() {
 		responseData := model.ResponseMessage{Message: constant.RouteCreatedWithSuccess, Status: constant.Success}
 		context.JSON(201, responseData)
 	})
+	return app.Engine
 
 }
 

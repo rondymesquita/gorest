@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/rondymesquita/gorest/server"
+	"github.com/rondymesquita/gorest/app"
 )
 
 func main() {

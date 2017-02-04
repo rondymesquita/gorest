@@ -11,6 +11,6 @@ type RouteBuilder struct{
 
 func (routeBuilder *RouteBuilder) BuildFrom(mock model.Mock){
 	routeBuilder.app.Engine.GET(mock.Path, func(context *gin.Context) {
-		context.JSON(200, mock.Response.Data)
+		context.JSON(mock.Response.StatusCode, mock.Response.Body)
 	})
 }
