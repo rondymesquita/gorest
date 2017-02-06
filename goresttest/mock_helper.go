@@ -11,19 +11,22 @@ type MockHelper struct {
 }
 
 func (mockHelper *MockHelper) BuildJsonGet() (model.Mock, *bytes.Buffer) {
+	request := model.Request{
+		Path: "/json-get",
+		HttpMethod : "get",
+	}
 	response := model.Response{
 		Type: "json",
 		Body: "{'id':'1', 'email':'email@email.com'}",
-		Headers: map[string][]string{
-			"Accept-Encoding": {"gzip, deflate"},
-			"Accept-Language": {"en-us"},
-			"Foo": {"Bar", "two"},
-		},
-		StatusCode: 200,
+		//Headers: map[string][]string{
+		//	"Accept-Encoding": {"gzip, deflate"},
+		//	"Accept-Language": {"en-us"},
+		//	"Foo": {"Bar", "two"},
+		//},
+		//StatusCode: 200,
 	}
 	mock := model.Mock{
-		Path: "/json-get",
-		HttpMethod : "get",
+		Request: request,
 		Response: response,
 	}
 

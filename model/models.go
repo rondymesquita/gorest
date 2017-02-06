@@ -5,13 +5,22 @@ import (
 )
 
 type Mock struct {
-	Path       string `json:"Path" binding:"required"`
-	HttpMethod string `json:"HttpMethod" binding:"required"`
+	Request    Request `json:"Request" binding:"required"`
 	Response   Response `json:"Response" binding:"required"`
 }
 
 func (mock *Mock) String() string {
-	s := []string{"Path", mock.Path, "HttpMethod", mock.HttpMethod, "Response", mock.Response.String()}
+	s := []string{"Request", mock.Request.String(), "Response", mock.Response.String()}
+	return strings.Join(s, " ")
+}
+
+type Request struct{
+	Path       string `json:"Path" binding:"required"`
+	HttpMethod string `json:"HttpMethod" binding:"required"`
+}
+
+func (request *Request) String() string {
+	s := []string{"Path", request.Path, "HttpMethod", request.HttpMethod}
 	return strings.Join(s, " ")
 }
 

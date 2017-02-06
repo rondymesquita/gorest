@@ -11,7 +11,7 @@ type RouteBuilder struct{
 }
 
 func (routeBuilder *RouteBuilder) BuildFrom(mock model.Mock){
-	routeBuilder.app.Engine.GET(mock.Path, func(context *gin.Context) {
+	routeBuilder.app.Engine.GET(mock.Request.Path, func(context *gin.Context) {
 		//context.Header("name", "Fulano")
 		headers := map[string][]string{
 			"Accept-Encoding": {"gzip, deflate"},

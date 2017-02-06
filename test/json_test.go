@@ -35,7 +35,7 @@ func TestCreateAMockRouteWithJsonReturnAndGetMethod(t *testing.T) {
 	var mockHelper goresttest.MockHelper
 	mock, mockJson := mockHelper.BuildJsonGet()
 
-	resp, _ := goresttest.Get(server, mock.Path)
+	resp, _ := goresttest.Get(server, mock.Request.Path)
 	assert.Equal(t, 404, resp.StatusCode)
 
 	response, responseMessage := goresttest.DoCreateMockRequest(server, mockJson)
@@ -44,7 +44,7 @@ func TestCreateAMockRouteWithJsonReturnAndGetMethod(t *testing.T) {
 	assert.Equal(t, responseMessageExpected, responseMessage)
 	assert.Equal(t, constant.ApplicationJsonUTF8, response.Header.Get(constant.ContentType))
 
-	response, body := goresttest.Get(server, mock.Path)
+	response, body := goresttest.Get(server, mock.Request.Path)
 	assert.Equal(t, 200, response.StatusCode)
 	assert.Equal(t, strconv.Quote(mock.Response.Body), body)
 	assert.Equal(t, constant.ApplicationJsonUTF8, response.Header.Get(constant.ContentType))
