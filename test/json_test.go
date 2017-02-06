@@ -50,6 +50,3 @@ func TestCreateAMockRouteWithJsonReturnAndGetMethod(t *testing.T) {
 	assert.Equal(t, constant.ApplicationJsonUTF8, response.Header.Get(constant.ContentType))
 
 }
-//
-func TestCreateAMockRouteWithCustomStatusCodeAndHeaders(t *testing.T) {
-}

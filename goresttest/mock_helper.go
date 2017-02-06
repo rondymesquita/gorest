@@ -4,38 +4,32 @@ import (
 	"github.com/rondymesquita/gorest/model"
 	"bytes"
 	"encoding/json"
+	"fmt"
 )
 
 type MockHelper struct {
 }
 
 func (mockHelper *MockHelper) BuildJsonGet() (model.Mock, *bytes.Buffer) {
-	var mock model.Mock
-	mock.Path = "/json-get"
-	mock.HttpMethod = "get"
-	var response model.Response
-	response.Type = "json"
-	response.Body = "{'id':'1', 'email':'email@email.com'}"
-	mock.Response = response
+	response := model.Response{
+		Type: "json",
+		Body: "{'id':'1', 'email':'email@email.com'}",
+		Headers: map[string][]string{
+			"Accept-Encoding": {"gzip, deflate"},
+			"Accept-Language": {"en-us"},
+			"Foo": {"Bar", "two"},
+		},
+		StatusCode: 200,
+	}
+	mock := model.Mock{
+		Path: "/json-get",
+		HttpMethod : "get",
+		Response: response,
+	}
 
 	mockJson := new(bytes.Buffer)
 	json.NewEncoder(mockJson).Encode(mock)
-
-	return mock, mockJson
-}
-
-func (mockHelper *MockHelper) BuildJsonGetWith(statusCode int) (model.Mock, *bytes.Buffer) {
-	var mock model.Mock
-	mock.Path = "/json-get"
-	mock.HttpMethod = "post"
-	var response model.Response
-	response.Type = "json"
-	response.Body = "{'id':'1', 'email':'email@email.com'}"
-	response.StatusCode = statusCode
-	mock.Response = response
-
-	mockJson := new(bytes.Buffer)
-	json.NewEncoder(mockJson).Encode(mock)
+	fmt.Println(mockJson)
 
 	return mock, mockJson
 }

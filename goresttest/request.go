@@ -16,12 +16,8 @@ var host = fmt.Sprintf("http://localhost:%s", app.Port)
 
 func DoCreateMockRequest(server *httptest.Server, payload *bytes.Buffer) (*http.Response, model.ResponseMessage){
 	url := fmt.Sprintf("%s%s", server.URL, "/create")
-	response, _ := http.Post(url, "application/json; charset=utf-8", payload)
-	//client := &http.Client{}
-	//request, _ := http.NewRequest("POST", url, payload)
-	//request.Header.Set("fulano","sicrano")
-	//response, _ := client.Do(request)
 
+	response, _ := http.Post(url, "application/json; charset=utf-8", payload)
 	var responseMessage model.ResponseMessage
 	json.NewDecoder(response.Body).Decode(&responseMessage)
 	return response, responseMessage
@@ -30,7 +26,18 @@ func DoCreateMockRequest(server *httptest.Server, payload *bytes.Buffer) (*http.
 
 func Get(server *httptest.Server, uri string) (*http.Response, string){
 	url := fmt.Sprintf("%s%s", server.URL, uri)
-	response, _ := http.Get(url)
+
+	client := &http.Client{}
+	req, _ := http.NewRequest("GET", url, nil)
+	//req.Header.Add("name", "Fulano")
+	//req.Header = map[string][]string{
+	//			"Accept-Encoding": {"gzip, deflate"},
+	//			"Accept-Language": {"en-us"},
+	//			"Foo": {"Bar", "two"},
+	//		}
+
+	response, _ := client.Do(req)
+
 	responseBody, _ := ioutil.ReadAll(response.Body)
 	data := strings.TrimSpace(string(responseBody))
 	return response, data

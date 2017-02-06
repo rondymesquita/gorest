@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/rondymesquita/gorest/model"
 
-	"github.com/braintree/manners"
 	"gopkg.in/gin-gonic/gin.v1"
 	"log"
 	"github.com/rondymesquita/gorest/constant"
@@ -23,6 +22,19 @@ func (app *App) Create() *gin.Engine{
 	app.Engine = gin.Default()
 
 	app.Engine.GET("/ping", func(context *gin.Context) {
+		headers := map[string][]string{
+			"Accept-Encoding": {"gzip, deflate"},
+			"Accept-Language": {"en-us"},
+			"Foo": {"Bar", "two"},
+		}
+		for key, values := range headers{
+			fmt.Println(key)
+			fmt.Println(values)
+			for subValue := range values{
+				context.Header(key, values[subValue])
+			}
+			fmt.Println("========================")
+		}
 		context.JSON(200, gin.H{
 			"message": "pong",
 		})
@@ -31,6 +43,7 @@ func (app *App) Create() *gin.Engine{
 	app.Engine.POST("/create", func(context *gin.Context) {
 		var mock model.Mock
 		context.BindJSON(&mock)
+		fmt.Println(mock.String())
 
 		routeBuilder := RouteBuilder{app}
 		routeBuilder.BuildFrom(mock)
@@ -45,10 +58,11 @@ func (app *App) Create() *gin.Engine{
 
 func (app *App) Start() {
 	log.Println("Starting Server")
-	manners.ListenAndServe(fmt.Sprintf(":%s", Port), app.Engine)
+	//manners.ListenAndServe(fmt.Sprintf(":%s", Port), app.Engine)
+	app.Engine.Run(fmt.Sprintf(":%s", Port))
 }
-
-func (app *App) Stop() {
-	manners.Close()
-	log.Println("Server Stopped ")
-}
+//
+//func (app *App) Stop() {
+//	manners.Close()
+//	log.Println("Server Stopped ")
+//}

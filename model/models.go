@@ -5,9 +5,9 @@ import (
 )
 
 type Mock struct {
-	Path       string
-	HttpMethod string
-	Response   Response
+	Path       string `json:"Path" binding:"required"`
+	HttpMethod string `json:"HttpMethod" binding:"required"`
+	Response   Response `json:"Response" binding:"required"`
 }
 
 func (mock *Mock) String() string {
@@ -16,13 +16,14 @@ func (mock *Mock) String() string {
 }
 
 type Response struct {
-	Body string
-	Type string
-	StatusCode int
+	Body string `json:"Body" binding:"required"`
+	Type string `json:"Type" binding:"required"`
+	//StatusCode int `json:"StatusCode" binding:"required"`
+	//Headers map[string][]string `json:"Headers" binding:"required"`
 }
 
 func (response *Response) String() string {
-	s := []string{"Data", response.Body, "Type", response.Type}
+	s := []string{"Body", response.Body, "Type", response.Type}
 	return strings.Join(s, " ")
 }
 
